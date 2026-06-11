@@ -1,0 +1,6 @@
+{
+  "name": "Vice City News",
+  "description": "The ultimate GTA 6 news hub, interactive speculation forum, and launch party ticket organizer. Feed the hype with retro radio, mock leak analysis, trivia challenges, and pre-orders.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
