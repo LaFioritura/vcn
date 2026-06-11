@@ -218,7 +218,7 @@ app.get("/api/bookings", (req, res) => {
 
 app.post("/api/bookings", (req, res) => {
   const bookings = readJsonFile(BOOKINGS_FILE, defaultBookings);
-  const { name, email, platform, edition, badgeEarned, discountPercent, notes, plateText, plateStyle } = req.body;
+  const { name, email, platform, edition, badgeEarned, discountPercent, notes, plateText, plateStyle, ticketType, ticketPrice, paymentMethod } = req.body;
   
   if (!name || !email) {
     return res.status(400).json({ error: "I campi Nome ed Email sono obbligatori!" });
@@ -230,14 +230,17 @@ app.post("/api/bookings", (req, res) => {
     name,
     email,
     platform: platform || "PS5",
-    edition: edition || "Standard Neon Steelbook",
+    edition: edition || "Copia Standard",
     badgeEarned: badgeEarned || "Hype Follower",
     discountPercent: discountPercent || 15,
     status: "Approvato", // Instantly approved to make the flow satisfying and prompt!
     timestamp: new Date().toISOString(),
     notes: notes || "",
     plateText: plateText || "VICE NY",
-    plateStyle: plateStyle || "vice"
+    plateStyle: plateStyle || "vice",
+    ticketType: ticketType || "regular",
+    ticketPrice: ticketPrice || 15,
+    paymentMethod: paymentMethod || "paypal"
   };
   
   bookings.unshift(newBooking);

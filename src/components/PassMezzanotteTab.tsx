@@ -15,6 +15,10 @@ interface PassMezzanotteProps {
   setBookingEdition: (val: string) => void;
   bookingNotes: string;
   setBookingNotes: (val: string) => void;
+  bookingTicketType: "regular" | "deluxe" | "vip";
+  setBookingTicketType: (val: "regular" | "deluxe" | "vip") => void;
+  bookingPaymentMethod: "paypal" | "stripe";
+  setBookingPaymentMethod: (val: "paypal" | "stripe") => void;
   bookingSuccessTicket: GameBooking | null;
   savedPlate: PlateDesign | null;
   onSavePlate: (p: PlateDesign) => void;
@@ -38,6 +42,10 @@ export default function PassMezzanotteTab({
   setBookingEdition,
   bookingNotes,
   setBookingNotes,
+  bookingTicketType,
+  setBookingTicketType,
+  bookingPaymentMethod,
+  setBookingPaymentMethod,
   bookingSuccessTicket,
   savedPlate,
   onSavePlate,
@@ -153,43 +161,164 @@ export default function PassMezzanotteTab({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label className="text-[10px] font-mono text-gray-400 block uppercase">PIATTAFORMA</label>
+                      <label className="text-[10px] font-mono text-gray-400 block uppercase font-bold text-neon-cyan">🎮 SELEZIONA PIATTAFORMA</label>
                       <select
                         value={bookingPlatform}
                         onChange={(e: any) => setBookingPlatform(e.target.value)}
-                        className="w-full bg-[#110c24] border border-white/10 p-2 rounded-xl text-xs text-white cursor-pointer focus:outline-none"
+                        className="w-full bg-[#110c24] border border-[#00ffff]/20 p-2.5 rounded-xl text-xs text-white cursor-pointer focus:border-neon-cyan outline-none font-mono"
                       >
                         <option value="PS5">PlayStation 5</option>
                         <option value="Xbox Series X">Xbox Series X</option>
-                        <option value="PC">PC (Leonida Launch Pack)</option>
+                        <option value="PC">PC (Vice-City Digital Pack)</option>
                       </select>
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-[10px] font-mono text-gray-400 block uppercase">EDIZIONE</label>
-                      <select
-                        value={bookingEdition}
-                        onChange={(e) => setBookingEdition(e.target.value)}
-                        className="w-full bg-[#110c24] border border-white/10 p-2 rounded-xl text-xs text-white cursor-pointer focus:outline-none"
-                      >
-                        <option value="Standard Neon Steelbook">Standard Neon (+ 15% Sconto)</option>
-                        <option value="Deluxe Retro Edition">Deluxe Retro (+ Poster)</option>
-                        <option value="Leonida's Outlaw Pack">Leonida's Collector (+ Gadgets)</option>
-                      </select>
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-[10px] font-mono text-gray-400 block uppercase">STATUS SCONTO</label>
-                      <div className="bg-[#1c1439] border border-neon-cyan/20 p-2 rounded-xl text-xs font-mono font-bold text-neon-cyan flex items-center justify-between">
+                      <label className="text-[10px] font-mono text-gray-400 block uppercase font-bold text-neon-pink">🏆 PRESTIGIO BADGE ATTUALE</label>
+                      <div className="bg-[#1c1439] border border-neon-pink/20 p-2.5 rounded-xl text-xs font-mono font-bold text-pink-300 flex items-center justify-between">
                         <span className="flex items-center gap-1">
-                          <Award className="w-3.5 h-3.5 text-yellow-500" />
+                          <Award className="w-3.5 h-3.5 text-yellow-500 shrink-0" />
                           {earnedBadge}
                         </span>
-                        <span>{calculatedDiscount}% OFF</span>
+                        <span className="text-neon-pink">{calculatedDiscount}% DI ABBUONO</span>
                       </div>
                     </div>
+                  </div>
+
+                  {/* VISUAL TICKET TIER CARDS WITH CLEAR INSTRUCTIONS */}
+                  <div className="space-y-3">
+                    <div className="bg-[#0b071a]/95 border-2 border-dashed border-[#a855f7]/30 p-3.5 rounded-2xl text-[11px] leading-relaxed text-gray-300 text-left font-sans space-y-2">
+                      <p className="font-mono text-neon-pink text-xs uppercase font-black tracking-wider">💡 REGOLE & ISTRUZIONI DI PRENOTAZIONE TICKET:</p>
+                      <ul className="list-disc pl-4 space-y-1 text-gray-300">
+                        <li><strong>Accesso Totale Garantito:</strong> Tutti e tre i pacchetti di seguito dicono sì all'ingresso e ti danno accesso immediato alla location e alla magica serata del Launch Party (con DJ Set a tema, gadget e cocktail dedicati!).</li>
+                        <li><strong>Esclusiva Copia Standard:</strong> Vendiamo e distribuiamo <strong>esclusivamente la copia fisica standard</strong> del gioco. La trovi inclusa solo nel pacchetto Premium da <span className="text-white font-bold">99€</span>.</li>
+                        <li><strong>Zero Attese e Code:</strong> Paghi tutto comodamente da casa in sicurezza tramite <strong>PayPal</strong> o <strong>Stripe</strong>. Al tuo arrivo ti basterà mostrare il QR code del tuo ticket per iniziare a festeggiare!</li>
+                      </ul>
+                    </div>
+
+                    <label className="text-[10px] font-mono text-gray-400 block uppercase font-bold">🎟️ SELEZIONA PACCHETTO INGRESSO & BENEFITS</label>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      {/* Regular Card */}
+                      <div 
+                        type="button"
+                        onClick={() => setBookingTicketType("regular")}
+                        className={`p-3.5 rounded-2xl border transition-all duration-300 cursor-pointer flex flex-col justify-between text-left relative ${
+                          bookingTicketType === "regular" 
+                            ? "bg-gradient-to-b from-[#1c113e] to-[#0e0724] border-neon-cyan shadow-[0_0_15px_rgba(0,255,255,0.15)] ring-1 ring-neon-cyan" 
+                            : "bg-[#0b071a]/60 border-white/5 hover:border-white/10"
+                        }`}
+                      >
+                        {bookingTicketType === "regular" && (
+                          <span className="absolute top-2 right-2 w-2 h-2 bg-neon-cyan rounded-full animate-ping" />
+                        )}
+                        <div>
+                          <div className="text-[10px] font-mono font-black tracking-widest text-emerald-400 uppercase">TIER 01 • BASE</div>
+                          <h4 className="text-sm font-display font-black tracking-tight text-white mt-0.5">REGULAR PASS</h4>
+                          <ul className="text-[9.5px] text-gray-400 mt-2 space-y-1 font-mono">
+                            <li className="flex items-center gap-1">✔ Ingresso garantito</li>
+                            <li className="flex items-center gap-1">✔ 1 Drink tropicale</li>
+                          </ul>
+                        </div>
+                        <div className="text-xl font-display font-black text-neon-cyan mt-4">15 € <span className="text-[9px] font-mono font-normal text-gray-400 block">Drink incluso</span></div>
+                      </div>
+
+                      {/* Deluxe Card */}
+                      <div 
+                        type="button"
+                        onClick={() => setBookingTicketType("deluxe")}
+                        className={`p-3.5 rounded-2xl border transition-all duration-300 cursor-pointer flex flex-col justify-between text-left relative ${
+                          bookingTicketType === "deluxe" 
+                            ? "bg-gradient-to-b from-[#1c113e] to-[#0e0724] border-[#a855f7] shadow-[0_0_15px_rgba(168,85,247,0.15)] ring-1 ring-[#a855f7]" 
+                            : "bg-[#0b071a]/60 border-white/5 hover:border-white/10"
+                        }`}
+                      >
+                        {bookingTicketType === "deluxe" && (
+                          <span className="absolute top-2 right-2 w-2 h-2 bg-[#a855f7] rounded-full animate-ping" />
+                        )}
+                        <div>
+                          <div className="text-[10px] font-mono font-black tracking-widest text-[#a855f7] uppercase">TIER 02 • FAN PACK</div>
+                          <h4 className="text-sm font-display font-black tracking-tight text-white mt-0.5">DELUXE GADGET PASS</h4>
+                          <ul className="text-[9.5px] text-gray-400 mt-2 space-y-1 font-mono">
+                            <li className="flex items-center gap-1 text-white">✔ Ingresso + Drink</li>
+                            <li className="flex items-center gap-1">✔ Adesivo olografico R*</li>
+                            <li className="flex items-center gap-1">✔ Logo GTA 3D Special</li>
+                          </ul>
+                        </div>
+                        <div className="text-xl font-display font-black text-[#a855f7] mt-4">35 € <span className="text-[9px] font-mono font-normal text-gray-400 block">Miglior rapporto benefits</span></div>
+                      </div>
+
+                      {/* VIP Card */}
+                      <div 
+                        type="button"
+                        onClick={() => setBookingTicketType("vip")}
+                        className={`p-3.5 rounded-2xl border transition-all duration-300 cursor-pointer flex flex-col justify-between text-left relative ${
+                          bookingTicketType === "vip" 
+                            ? "bg-gradient-to-b from-[#1c113e] to-[#0e0724] border-neon-pink shadow-[0_0_15px_rgba(255,0,204,0.15)] ring-1 ring-neon-pink" 
+                            : "bg-[#0b071a]/60 border-white/5 hover:border-white/10"
+                        }`}
+                      >
+                        {bookingTicketType === "vip" && (
+                          <span className="absolute top-2 right-2 w-2 h-2 bg-neon-pink rounded-full animate-ping" />
+                        )}
+                        <div>
+                          <div className="text-[10px] font-mono font-black tracking-widest text-neon-pink uppercase">TIER 03 • COLLECTOR</div>
+                          <h4 className="text-sm font-display font-black tracking-tight text-white mt-0.5">VIP GAME PASS</h4>
+                          <ul className="text-[9.5px] text-gray-400 mt-2 space-y-1 font-mono">
+                            <li className="flex items-center gap-1 text-white">✔ Ingresso + Drink</li>
+                            <li className="flex items-center gap-1 font-bold text-neon-cyan">✔ COPIA STANDARD GIOCO</li>
+                            <li className="flex items-center gap-1">✔ Adesivo + Logo 3D R*</li>
+                          </ul>
+                        </div>
+                        <div className="text-xl font-display font-black text-neon-pink mt-4">
+                          99 € 
+                          <span className="text-[8.5px] font-mono font-normal text-[#00ffff] block mt-0.5">
+                            {calculatedDiscount}% sconto applicato alla cassa per gioco!
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* PAYMENT METHOD SELECTION */}
+                  <div className="bg-black/30 border border-white/5 rounded-2xl p-4 space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[10px] font-mono text-gray-400 uppercase font-black">💳 METODO DI PAGAMENTO CRITTOGRAFATO</span>
+                      <span className="text-[8px] font-mono text-emerald-400 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+                        SSL SECURE CHANNEL
+                      </span>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setBookingPaymentMethod("paypal")}
+                        className={`py-2 px-3 rounded-xl border font-mono font-bold text-xs flex items-center justify-center gap-2 select-none cursor-pointer transition-all ${
+                          bookingPaymentMethod === "paypal"
+                            ? "bg-[#002f87]/40 border-[#0079c1] text-white font-black"
+                            : "bg-black/40 border-white/5 text-gray-400 hover:text-white"
+                        }`}
+                      >
+                        <span className="text-sky-400 font-sans italic font-black">PayPal</span>
+                      </button>
+                      
+                      <button
+                        type="button"
+                        onClick={() => setBookingPaymentMethod("stripe")}
+                        className={`py-2 px-3 rounded-xl border font-mono font-bold text-xs flex items-center justify-center gap-2 select-none cursor-pointer transition-all ${
+                          bookingPaymentMethod === "stripe"
+                            ? "bg-[#635bff]/25 border-[#635bff] text-white font-black"
+                            : "bg-black/40 border-white/5 text-gray-400 hover:text-white"
+                        }`}
+                      >
+                        <span className="text-purple-400 font-sans italic font-bold">Stripe Pay</span>
+                      </button>
+                    </div>
+                    <p className="text-[9px] font-mono text-gray-400 italic leading-tight text-center">
+                      Nessun addebito reale verrà effettuato su conti veri. La transazione è simulata in sandbox locale e sbloccherà istantaneamente il tuo Boarding Pass e il radar della fiera!
+                    </p>
                   </div>
 
                   <div className="space-y-1">
@@ -229,7 +358,7 @@ export default function PassMezzanotteTab({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 text-xs font-mono">
+                  <div className="grid grid-cols-2 gap-4 text-xs font-mono border-b border-white/5 pb-3">
                     <div>
                       <span className="text-[9px] text-gray-500 block">NOME FAN:</span>
                       <strong className="text-white font-bold block">{bookingSuccessTicket.name}</strong>
@@ -239,6 +368,34 @@ export default function PassMezzanotteTab({
                       <span className="text-[9px] text-gray-500 block">CONSOLE SELEZIONATA:</span>
                       <strong className="text-neon-pink font-bold block">{bookingSuccessTicket.platform}</strong>
                       <span className="text-gray-400 block mt-1">{bookingSuccessTicket.edition}</span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 text-xs font-mono">
+                    <div>
+                      <span className="text-[9px] text-gray-500 block">🏷️ TIPO TICKET:</span>
+                      <strong className="text-[#00ffff] font-bold block uppercase">
+                        {bookingSuccessTicket.ticketType === "vip" 
+                          ? "VIP COLLECTOR (99€)" 
+                          : bookingSuccessTicket.ticketType === "deluxe" 
+                            ? "DELUXE GADGETS (35€)" 
+                            : "REGULAR PASS (15€)"}
+                      </strong>
+                      <span className="text-[9.5px] text-gray-400 leading-tight block mt-0.5">
+                        {bookingSuccessTicket.ticketType === "vip"
+                          ? "Include Copia Fisica Standard"
+                          : bookingSuccessTicket.ticketType === "deluxe"
+                            ? "Include Logo 3D & Adesivo"
+                            : "Include Ingresso & 1 Drink"}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[9px] text-gray-500 block">💳 PAGATO DIGITALMENTE DA CASA:</span>
+                      <strong className="text-emerald-400 font-bold block uppercase flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+                        {bookingSuccessTicket.paymentMethod || "paypal"} (PROTETTO)
+                      </strong>
+                      <span className="text-[9px] text-gray-400 block mt-0.5">Transazione ID: Sandbox_VCN_{bookingSuccessTicket.id}</span>
                     </div>
                   </div>
 

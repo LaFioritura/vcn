@@ -38,6 +38,9 @@ export interface GameBooking {
   notes?: string;
   plateText?: string;
   plateStyle?: string;
+  ticketType?: 'regular' | 'deluxe' | 'vip';
+  ticketPrice?: number;
+  paymentMethod?: 'paypal' | 'stripe';
 }
 
 export interface MapSpot {

@@ -43,8 +43,10 @@ export default function App() {
   const [bookingName, setBookingName] = useState("");
   const [bookingEmail, setBookingEmail] = useState("");
   const [bookingPlatform, setBookingPlatform] = useState<"PS5" | "Xbox Series X" | "PC">("PS5");
-  const [bookingEdition, setBookingEdition] = useState("Standard Neon Steelbook");
+  const [bookingEdition, setBookingEdition] = useState("Copia Standard");
   const [bookingNotes, setBookingNotes] = useState("");
+  const [bookingTicketType, setBookingTicketType] = useState<"regular" | "deluxe" | "vip">("regular");
+  const [bookingPaymentMethod, setBookingPaymentMethod] = useState<"paypal" | "stripe">("paypal");
   const [bookingSuccessTicket, setBookingSuccessTicket] = useState<GameBooking | null>(null);
 
   // Custom live vehicle license plate
@@ -157,6 +159,13 @@ export default function App() {
       calculatedDiscount = 10;
     }
 
+    let ticketPrice = 15;
+    if (bookingTicketType === "deluxe") {
+      ticketPrice = 35;
+    } else if (bookingTicketType === "vip") {
+      ticketPrice = 99;
+    }
+
     setIsLoading(true);
     try {
       const response = await fetch("/api/bookings", {
@@ -166,12 +175,19 @@ export default function App() {
           name: bookingName,
           email: bookingEmail,
           platform: bookingPlatform,
-          edition: bookingEdition,
+          edition: bookingTicketType === "vip" 
+            ? "VIP + Copia Fisica Standard" 
+            : bookingTicketType === "deluxe" 
+              ? "Deluxe + Gadgets" 
+              : "Standard Entry Ticket",
           badgeEarned: earnedBadge,
           discountPercent: calculatedDiscount,
           notes: bookingNotes,
           plateText: savedPlate?.text || "VICE NY",
-          plateStyle: savedPlate?.styleId || "vice"
+          plateStyle: savedPlate?.styleId || "vice",
+          ticketType: bookingTicketType,
+          ticketPrice: ticketPrice,
+          paymentMethod: bookingPaymentMethod
         }),
       });
 
@@ -181,7 +197,7 @@ export default function App() {
 
       const newBookingResult = await response.json();
       setBookingSuccessTicket(newBookingResult);
-      triggerNotification(`Ticket Party & Copia Fisica (${calculatedDiscount}% Sconto) Riservati! La location è sbloccata!`);
+      triggerNotification(`Ticket ${bookingTicketType.toUpperCase()} (${ticketPrice}€) riservato e pagato via ${bookingPaymentMethod.toUpperCase()}! La location segreta è sbloccata!`);
       
       // Reset forms
       setBookingName("");
@@ -465,7 +481,7 @@ export default function App() {
             
             {/* 1. NEWSROOM FEED TAB SECTION */}
             {activeTab === "newsroom" && (
-              <NewsroomTab news={news} onNavigateToTab={handleNavigateToTab} />
+              <NewsroomTab news={news} blog={blog} onNavigateToTab={handleNavigateToTab} />
             )}
 
             {/* 2. PASS MEZZANOTTE TICKET COMPILATION TAB SECTION */}
@@ -481,6 +497,10 @@ export default function App() {
                 setBookingEdition={setBookingEdition}
                 bookingNotes={bookingNotes}
                 setBookingNotes={setBookingNotes}
+                bookingTicketType={bookingTicketType}
+                setBookingTicketType={setBookingTicketType}
+                bookingPaymentMethod={bookingPaymentMethod}
+                setBookingPaymentMethod={setBookingPaymentMethod}
                 bookingSuccessTicket={bookingSuccessTicket}
                 savedPlate={savedPlate}
                 onSavePlate={setSavedPlate}

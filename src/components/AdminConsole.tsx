@@ -251,6 +251,18 @@ export default function AdminConsole({
                       <td className="py-3 px-3 text-left text-gray-300">
                         <span className="block font-semibold">{b.platform}</span>
                         <span className="text-[9px] text-gray-500 block">{b.edition}</span>
+                        <div className="mt-1 flex flex-wrap gap-1">
+                          <span className={`text-[8px] font-mono font-bold px-1.5 py-0.5 rounded capitalize ${
+                            b.ticketType === "vip" ? "bg-pink-900/40 text-pink-300 border border-pink-500/20" :
+                            b.ticketType === "deluxe" ? "bg-purple-900/40 text-purple-300 border border-purple-500/20" :
+                            "bg-cyan-900/40 text-cyan-300 border border-cyan-500/20"
+                          }`}>
+                            🎫 {b.ticketType || "regular"} ({b.ticketPrice || 15}€)
+                          </span>
+                          <span className="text-[8px] font-mono font-bold px-1.5 py-0.5 bg-zinc-900 text-emerald-400 rounded border border-emerald-500/15 uppercase">
+                            💳 {b.paymentMethod || "paypal"}
+                          </span>
+                        </div>
                       </td>
                       <td className="py-3 px-3 text-left font-mono text-neon-pink font-bold">{b.discountPercent}% OFF</td>
                       <td className="py-3 px-3 text-left text-[10px] text-yellow-400 font-bold">🏆 {b.badgeEarned}</td>

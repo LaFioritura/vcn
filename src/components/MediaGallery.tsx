@@ -167,9 +167,9 @@ export default function MediaGallery({ onNavigateToTab }: MediaGalleryProps) {
 
       {/* Deep diagnostic screenshot Modal */}
       {modalItem && (
-        <div className="fixed inset-0 bg-black/92 backdrop-blur-md flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black/95 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 z-50">
           <div
-            className="bg-[#120e26] border-2 border-neon-pink/50 max-w-2xl w-full rounded-2xl overflow-hidden relative shadow-2xl animate-scale-in"
+            className="bg-[#120e26] border-2 border-neon-pink/50 max-w-2xl w-full rounded-2xl overflow-hidden relative shadow-2xl animate-scale-in max-h-[90vh] md:max-h-[94vh] flex flex-col"
           >
             {/* Close Cross */}
             <button
@@ -180,10 +180,11 @@ export default function MediaGallery({ onNavigateToTab }: MediaGalleryProps) {
             </button>
 
             {/* Cinematic HD viewport */}
-            <div className="aspect-video w-full bg-black relative">
+            <div className="aspect-video w-full bg-black relative shrink-0">
               <img
                 src={modalItem.imageUrl}
                 alt={modalItem.title}
+                referrerPolicy="no-referrer"
                 className="w-full h-full object-cover"
               />
               
@@ -203,33 +204,51 @@ export default function MediaGallery({ onNavigateToTab }: MediaGalleryProps) {
               </div>
             </div>
 
-            {/* Breakdown specifications metrics */}
-            <div className="p-5 space-y-3">
+            {/* Breakdown specifications metrics (Scrollable to prevent screen overflow) */}
+            <div className="p-4 sm:p-5 space-y-4 overflow-y-auto flex-1 text-left custom-scrollbar">
               <div className="flex items-center justify-between">
-                <h3 className="text-base font-display font-black text-white tracking-tight uppercase">
+                <h3 className="text-sm sm:text-base font-display font-black text-white tracking-tight uppercase">
                   {modalItem.title}
                 </h3>
                 <span className="text-[9px] font-mono text-gray-500">SPEC_ID: {modalItem.id.toUpperCase()}</span>
               </div>
 
-              <p className="text-xs text-gray-300 leading-relaxed bg-black/30 p-3 rounded-xl border border-white/5">
+              <p className="text-[11px] sm:text-xs text-gray-300 leading-relaxed bg-black/30 p-3 rounded-xl border border-white/5">
                 {modalItem.description}
               </p>
 
               {/* Technical details report stripe */}
               <div className="bg-pink-950/20 p-3 rounded-xl border border-pink-500/25 flex gap-3 text-xs items-start">
                 <Sliders className="w-5 h-5 text-neon-pink shrink-0 mt-0.5" />
-                <div>
+                <div className="space-y-1">
                   <strong className="text-neon-pink uppercase font-mono block text-[9px] tracking-widest font-black">
-                    REPORT TECNICO ROCKSTAR ENGINE
+                    REPORT TECNICO & FILE INFO
                   </strong>
-                  <p className="text-[10.5px] text-gray-400 mt-1 leading-snug">
-                    {modalItem.specs}. I calcoli fotometrici e le rifrazioni volumetriche dei droni indicano un potenziamento monumentale dell'interazione ambientale e climatica nello Stato di Leonida.
+                  <p className="text-[10px] text-gray-300 leading-snug">
+                    {modalItem.specs}. Ottimizzato per PC Desktop con supporto HDR e colori estesi e calibrati.
                   </p>
                 </div>
               </div>
 
-              <div className="flex gap-2">
+              {/* PC Desktop Browser Instructions Block */}
+              <div className="bg-[#0b081e] p-3 rounded-xl border border-[#00ffff]/20 space-y-1 text-left font-mono text-[10px]">
+                <span className="text-[#00ffff] font-bold block uppercase tracking-wider">🖥️ ISTRUZIONI DI DOWNLOAD PC/DESKTOP:</span>
+                <p className="text-gray-300 leading-relaxed text-[9.5px]">
+                  Per applicare questa spettacolare opera d'arte come sfondo sul tuo computer: 
+                  Fai <strong>click destro</strong> direttamente sopra l'immagine ed ordina la voce <strong>"Salva immagine con nome..."</strong> dal menu del browser. Oppure usa il pulsante in basso per visualizzare l'originale ad altissima risoluzione a schermo intero!
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-2 pt-1">
+                <a
+                  href={modalItem.imageUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="py-2.5 px-4 bg-[#110c24] border border-[#00ffff]/30 text-neon-cyan hover:bg-[#00ffff]/10 font-bold text-[10.5px] uppercase tracking-widest rounded-xl text-center cursor-pointer select-none transition-all flex items-center justify-center gap-1.5"
+                >
+                  🌐 APRI REALE IMMAGINE HD ↗
+                </a>
+                
                 <button
                   onClick={() => {
                     if (onNavigateToTab) {
@@ -240,15 +259,16 @@ export default function MediaGallery({ onNavigateToTab }: MediaGalleryProps) {
                     }
                     setModalItem(null);
                   }}
-                  className="flex-1 py-3 bg-gradient-to-r from-[#ff00cc] to-purple-600 text-white font-extrabold text-[10.5px] uppercase tracking-widest rounded-xl cursor-pointer hover:brightness-110 active:scale-98 transition-all"
+                  className="flex-1 py-2.5 bg-gradient-to-r from-[#ff00cc] to-purple-600 text-white font-extrabold text-[10.5px] uppercase tracking-widest rounded-xl cursor-pointer hover:brightness-110 active:scale-98 transition-all"
                 >
-                  RISERVA COPIA SCONTATA AL PARTY NOW
+                  RISERVA COPIA AL PARTY NOW
                 </button>
+                
                 <button
                   onClick={() => setModalItem(null)}
-                  className="px-5 py-3 bg-gray-950 border border-white/10 text-gray-400 font-extrabold text-[10.5px] uppercase tracking-widest rounded-xl cursor-pointer hover:text-white"
+                  className="px-5 py-2.5 bg-gray-955 border border-white/10 text-gray-400 font-extrabold text-[10.5px] uppercase tracking-widest rounded-xl cursor-pointer hover:text-white"
                 >
-                  CHIUDI SCREENSHOT
+                  CHIUDI
                 </button>
               </div>
             </div>
